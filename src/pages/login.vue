@@ -87,27 +87,28 @@
               username: this.loginForm.username,
               password: this.$Md5.hex_md5(this.loginForm.password)
             }
-            requestLogin(data).then(res => {
-              this.logging = false;
-              if (res.data.code === '0001') {
-                let user = {
-                  name: escape(btoa(data.username)),
-                  pwd: escape(btoa(this.loginForm.password)),
-                }
-                if(this.loginForm.remember) {
-                  localStorage.setItem('user', JSON.stringify(user))
-                } else {
-                  localStorage.removeItem('user')
-                }
-                Utils.setCookie('userId', res.data.result.userInfo.userId)
-                this.$router.push({ path: '/account/waiting' })
-              } else {
-                this.$message.error(res.data.message)
-              }
-            }).catch(err => {
-              console.log(err)
-              this.logging = false
-            })
+            this.$router.push({ path: '/container' })
+            // requestLogin(data).then(res => {
+            //   this.logging = false;
+            //   if (res.data.code === '0001') {
+            //     let user = {
+            //       name: escape(btoa(data.username)),
+            //       pwd: escape(btoa(this.loginForm.password)),
+            //     }
+            //     if(this.loginForm.remember) {
+            //       localStorage.setItem('user', JSON.stringify(user))
+            //     } else {
+            //       localStorage.removeItem('user')
+            //     }
+            //     Utils.setCookie('userId', res.data.result.userInfo.userId)
+            //     this.$router.push({ path: '/account/waiting' })
+            //   } else {
+            //     this.$message.error(res.data.message)
+            //   }
+            // }).catch(err => {
+            //   console.log(err)
+            //   this.logging = false
+            // })
           }
         })
       },
