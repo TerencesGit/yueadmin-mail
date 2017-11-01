@@ -9,7 +9,7 @@
 <script>
 import Navigator from './Navigator'
 import MainComp from './Main'
-import { myFinance } from '@/api'
+import { getMyInfo } from '@/api'
 export default {
   name: 'container',
   components: {
@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     getFinanceInfo () {
-      myFinance().then(res => {
+      getMyInfo().then(res => {
         if (res.data.code === '0001') {
           let financeInfo = res.data.result.financeInfo;
           financeInfo.balance = (financeInfo.balance / 100).toFixed(2)

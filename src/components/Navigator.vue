@@ -5,7 +5,7 @@
 				<div class="topbar-left">
 					<span class="brand">
 						<i class="el-icon-message"></i>
-						悦视觉后台邮件系统
+						悦视觉后台信息发送系统
 					</span>
 				</div>
 				<div class="topbar-right">
@@ -33,9 +33,15 @@
 		</div>
 		<nav class="nav">
 			<el-menu :default-active="$route.path" class="el-menu-demo" mode="horizontal" router>
-				<el-menu-item v-for="(menu, index) in routers" :index="menu.link" :key="menu.id">
-          <router-link :to="menu.link">{{ menu.name }}</router-link>
-        </el-menu-item>
+				<!-- <el-menu-item v-for="(menu, index) in routers" :index="menu.link" :key="menu.id"> -->
+          <!-- <router-link :to="menu.link">{{ menu.name }}</router-link> -->
+          <el-submenu v-for="(menu, index) in routers" :index="index+''" :key="menu.id">
+          	<template slot="title">{{ menu.name }}</template>
+          	<el-menu-item v-for="(submenu, index) in menu.children" :index="submenu.link" :key="submenu.id"> 
+          		<router-link :to="submenu.link">{{ submenu.name }}</router-link>
+          	</el-menu-item>
+          </el-submenu>
+        <!-- </el-menu-item> -->
 			</el-menu>
 		</nav>
 	</header>
@@ -49,16 +55,47 @@
 	    	financeInfo: {},
 	    	routers: [
 	        {
-	        	name: '群发信息', 
-	        	link: '/message/sendList', 
+	        	name: '短信管理', 
+	        	children: [
+	        		{
+			        	name: '应用列表', 
+			        	link: '/sms/clientList', 
+			        },
+			        {
+			        	name: '模板列表', 
+			        	link: '/sms/templateList', 
+			        },
+			        {
+			        	name: '群发记录', 
+			        	link: '/sms/sendList', 
+			        },
+			        {
+			        	name: '单条记录', 
+			        	link: '/sms/record', 
+			        },
+	        	]	
 	        },
 	        {
-	        	name: '应用列表', 
-	        	link: '/message/clientList', 
-	        },
-	        {
-	        	name: '模板列表', 
-	        	link: '/message/templateList', 
+	        	name: '邮件管理', 
+	        	link: '/mail/sendList',
+	        	children: [
+	        		{
+			        	name: '应用列表', 
+			        	link: '/mail/clientList', 
+			        },
+			        {
+			        	name: '模板列表', 
+			        	link: '/mail/templateList', 
+			        },
+			        {
+			        	name: '群发记录', 
+			        	link: '/mail/sendList', 
+			        },
+			        {
+			        	name: '单条记录', 
+			        	link: '/mail/record', 
+			        },
+	        	]	
 	        },
 	      ],
 	    }
@@ -152,6 +189,7 @@
 	  .el-dropdown-link {
 			padding: 6px 12px;
 	    border: 1px solid #f0f0f8;
+	    border-radius: 4px;
 	    background: #fff;
 	    cursor: pointer;
 	    white-space: nowrap;

@@ -87,7 +87,7 @@
               username: this.loginForm.username,
               password: this.$Md5.hex_md5(this.loginForm.password)
             }
-            this.$router.push({ path: '/container' })
+            this.$router.push({ path: '/' })
             // requestLogin(data).then(res => {
             //   this.logging = false;
             //   if (res.data.code === '0001') {

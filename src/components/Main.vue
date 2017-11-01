@@ -50,7 +50,7 @@
 	</div>
 </template>
 <script>
-	import { setPayPassword } from '@/api'
+	import {  } from '@/api'
 	// import { mapGetters } from 'vuex'
 	export default {
 		data () {
@@ -158,24 +158,26 @@
 	}
 	.site-footer {
     position: relative;
-    padding: 11px 0;
+    padding: 12px 0;
     text-align: center;
     color: #fff;
     background: #5b6e84;
-	}
-	.back-top {
-		position: absolute;
-		right: 1%;
-	  width: 20px;
-	  height: 20px;
-	  line-height: 20px;
-	  color: #72d0eb;
-	  background: rgba(127, 221, 248, .5);
-	  border-radius: 50%;
-	  i {
-			color: #2A3542;
+    .back-top {
+			position: absolute;
+			right: 1%;
+		  width: 20px;
+		  height: 20px;
+		  line-height: 20px;
+		  color: #72d0eb;
+		  background: rgba(127, 221, 248, .5);
+		  border-radius: 50%;
+		  i {
+				color: #f0f0f0;
+				transform: scale(.7)
+			}
 		}
 	}
+	
 	.fade-enter-active, .fade-leave-active {
 	  transition: all .3s;
 	}
