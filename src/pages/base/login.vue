@@ -56,7 +56,7 @@
   </transition>
 </template>
 <script>
-  // import { requestLogin } from '@/api'
+  import { requestLogin } from '@/api'
   import Utils from '@/assets/js/utils'
   export default {
     data() {
@@ -87,28 +87,27 @@
               username: this.loginForm.username,
               password: this.$Md5.hex_md5(this.loginForm.password)
             }
-            this.$router.push({ path: '/' })
-            // requestLogin(data).then(res => {
-            //   this.logging = false;
-            //   if (res.data.code === '0001') {
-            //     let user = {
-            //       name: escape(btoa(data.username)),
-            //       pwd: escape(btoa(this.loginForm.password)),
-            //     }
-            //     if(this.loginForm.remember) {
-            //       localStorage.setItem('user', JSON.stringify(user))
-            //     } else {
-            //       localStorage.removeItem('user')
-            //     }
-            //     Utils.setCookie('userId', res.data.result.userInfo.userId)
-            //     this.$router.push({ path: '/account/waiting' })
-            //   } else {
-            //     this.$message.error(res.data.message)
-            //   }
-            // }).catch(err => {
-            //   console.log(err)
-            //   this.logging = false
-            // })
+            requestLogin(data).then(res => {
+              this.logging = false;
+              if (res.data.code === '0001') {
+                let user = {
+                  name: escape(btoa(data.username)),
+                  pwd: escape(btoa(this.loginForm.password)),
+                }
+                if(this.loginForm.remember) {
+                  localStorage.setItem('user', JSON.stringify(user))
+                } else {
+                  localStorage.removeItem('user')
+                }
+                Utils.setCookie('userId', res.data.result.userInfo.userId)
+                this.$router.replace({ path: '/' })
+              } else {
+                this.$message.error(res.data.message)
+              }
+            }).catch(err => {
+              console.log(err)
+              this.logging = false
+            })
           }
         })
       },

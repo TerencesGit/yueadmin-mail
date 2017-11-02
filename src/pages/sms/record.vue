@@ -1,5 +1,6 @@
 <template>
 	<section>
+		<div v-title :data-title="this.$route.name"></div>
 		<el-row class="toolbar">
 			<el-button type="primary">新增</el-button>
 		</el-row>
@@ -9,9 +10,9 @@
 	    highlight-current-row
 	    style="width: 100%">
 	    <el-table-column prop="recordId" label="记录ID" sortable></el-table-column>
+	    <el-table-column prop="createTime" label="创建时间" sortable :formatter="formatTime"></el-table-column>
 	    <el-table-column prop="phone" label="手机号"></el-table-column>
 	    <el-table-column prop="checkCode" label="验证码"></el-table-column>
-	    <el-table-column prop="createTime" label="创建时间"></el-table-column>
 	    <el-table-column prop="sendStatus" label="发送状态"></el-table-column>
 	    <el-table-column prop="clientId" label="应用ID"></el-table-column>
 	    <el-table-column prop="tempId" label="模板ID"></el-table-column>
@@ -21,7 +22,7 @@
 	      @size-change="handleSizeChange"
 	      @current-change="handleCurrentChange"
 	      :current-page="pageNo"
-	      :page-sizes="[100, 200, 300, 400]"
+	      :page-sizes="[10, 20, 30, 40]"
 	      :page-size="pageSize"
 	      layout="total, sizes, prev, pager, next, jumper"
 	      :total="total">
@@ -75,11 +76,14 @@
 			}
 		},
 		methods: {
+			formatTime(row) {
+				return this.$moment(row.createTime).format('YYYY-MM-DD')
+			},
 			handleSizeChange(val) {
 				this.pageSize = val;
 			},
 			handleCurrentChange(val) {
-			this.pageNo = val;
+				this.pageNo = val;
 			},
 			getRecords() {
 				let params = {

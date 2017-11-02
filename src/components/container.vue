@@ -1,6 +1,6 @@
 <template>
 	<div id="container">
-    <Navigator></Navigator>
+    <Navigator :userInfo="userInfo"></Navigator>
     <keep-alive>
       <MainComp></MainComp>
     </keep-alive>
@@ -16,16 +16,18 @@ export default {
     Navigator,
     MainComp
   },
+  data() {
+    return {
+      userInfo: null
+    }
+  },
   methods: {
-    getFinanceInfo () {
+    getUserInfo () {
       getMyInfo().then(res => {
         if (res.data.code === '0001') {
-          let financeInfo = res.data.result.financeInfo;
-          financeInfo.balance = (financeInfo.balance / 100).toFixed(2)
-          financeInfo.frozen = (financeInfo.frozen / 100).toFixed(2)
-          this.$store.dispatch('saveFinanceInfo', financeInfo)
-        } else if (res.data.code === 'C0003') {
-          this.$store.dispatch('settingPayPass', true)
+          let userInfo = res.data.result.userInfo;
+          userInfo.avatarUrl = userInfo.avatar;
+          this.userInfo = res.data.result.userInfo;
         } else {
           this.$message.error(res.data.message)
         }
@@ -37,7 +39,7 @@ export default {
     }
   },
   mounted () {
-    // this.getFinanceInfo()
+    this.getUserInfo()
   }
 }
 </script>

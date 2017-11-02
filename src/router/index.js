@@ -6,14 +6,14 @@ import SmsRecord from '@/pages/sms/record'
 
 const routes =  [
   {
+    path: '/',
+    name: '短信发送记录',
+    redirect: '/sms/record/mass'
+  },
+  {
     path: '/login',
     name: '悦视觉.登录',
     component: Login,
-  },
-  {
-    path: '/',
-    name: '短信发送记录',
-    redirect: '/sms/record'
   },
   {
     path: '/sms',
@@ -21,8 +21,8 @@ const routes =  [
     component: Container,
     children: [
     	{
-    		path: 'record',
-		    name: '发送记录',
+    		path: 'record/mass',
+		    name: '短信发送记录',
 		    component: SmsRecord,
     	}
     ]

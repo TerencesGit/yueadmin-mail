@@ -11,9 +11,9 @@
 				<div class="topbar-right">
 					<el-dropdown :hide-on-click="false" trigger="click">
 					  <span class="el-dropdown-link">
-					  	<img v-if="financeInfo.avatarUrl" :src="financeInfo.avatarUrl" class="avatar"/>
+					  	<img v-if="userInfo && userInfo.avatarUrl" :src="userInfo.avatarUrl" class="avatar"/>
 					  	<img v-else src="../assets/img/avatar.gif" alt="头像" class="avatar"/>
-					    <span>{{ financeInfo.financeName }}</span>
+					    <span>{{ userInfo && userInfo.name }}</span>
 					    <i class="el-icon-caret-bottom el-icon--right"></i>
 					  </span>
 					  <el-dropdown-menu slot="dropdown">
@@ -32,16 +32,13 @@
 			</div>
 		</div>
 		<nav class="nav">
-			<el-menu :default-active="$route.path" class="el-menu-demo" mode="horizontal" router>
-				<!-- <el-menu-item v-for="(menu, index) in routers" :index="menu.link" :key="menu.id"> -->
-          <!-- <router-link :to="menu.link">{{ menu.name }}</router-link> -->
-          <el-submenu v-for="(menu, index) in routers" :index="index+''" :key="menu.id">
-          	<template slot="title">{{ menu.name }}</template>
-          	<el-menu-item v-for="(submenu, index) in menu.children" :index="submenu.link" :key="submenu.id"> 
-          		<router-link :to="submenu.link">{{ submenu.name }}</router-link>
-          	</el-menu-item>
-          </el-submenu>
-        <!-- </el-menu-item> -->
+			<el-menu :default-active="$route.path" mode="horizontal" router>
+        <el-submenu v-for="(menu, index) in menus" :index="index+''" :key="menu.id">
+        	<template slot="title">{{ menu.name }}</template>
+        	<el-menu-item v-if="menu.children" v-for="(submenu, index) in menu.children" :index="submenu.link" :key="submenu.id">
+        		<router-link :to="submenu.link">{{ submenu.name }}</router-link>
+        	</el-menu-item>
+        </el-submenu>
 			</el-menu>
 		</nav>
 	</header>
@@ -50,35 +47,61 @@
 	// import { mapGetters } from 'vuex'
 	import { requestExit } from '@/api'
 	export default {
+		props: ['userInfo'],
 	  data() {
 	    return {
-	    	financeInfo: {},
-	    	routers: [
+	    	menus: [
+	    		{
+	    			name: '短信发送记录',
+	    			children: [
+	        		{
+			        	name: '群发记录',
+			        	link: '/sms/reocrd/mass',
+			        },
+			        {
+			        	name: '单发记录',
+			        	link: '/sms/reocrd/single',
+			        },
+			      ]
+	    		},
 	        {
-	        	name: '短信管理', 
+	        	name: '短信管理',
 	        	children: [
 	        		{
-			        	name: '应用列表', 
-			        	link: '/sms/clientList', 
+			        	name: '群发管理',
+			        	link: '/sms/manage/send',
+			        },
+	        		{
+			        	name: '应用管理',
+			        	link: '/sms/manage/client',
 			        },
 			        {
-			        	name: '模板列表', 
-			        	link: '/sms/templateList', 
-			        },
-			        {
-			        	name: '群发记录', 
-			        	link: '/sms/sendList', 
-			        },
-			        {
-			        	name: '单条记录', 
-			        	link: '/sms/record', 
+			        	name: '模板管理',
+			        	link: '/sms/manage/template',
 			        },
 	        	]	
 	        },
 	        {
+	    			name: '邮件发送记录',
+	    			children: [
+	        		{
+			        	name: '群发记录',
+			        	link: '/mail/massMailRecord',
+			        },
+			        {
+			        	name: '单发记录',
+			        	link: '/mail/singleRecord',
+			        },
+			      ]
+	    		},
+	        {
 	        	name: '邮件管理', 
 	        	link: '/mail/sendList',
 	        	children: [
+	        		{
+			        	name: '群发管理', 
+			        	link: '/mail/sendList', 
+			        },
 	        		{
 			        	name: '应用列表', 
 			        	link: '/mail/clientList', 
@@ -86,14 +109,6 @@
 			        {
 			        	name: '模板列表', 
 			        	link: '/mail/templateList', 
-			        },
-			        {
-			        	name: '群发记录', 
-			        	link: '/mail/sendList', 
-			        },
-			        {
-			        	name: '单条记录', 
-			        	link: '/mail/record', 
 			        },
 	        	]	
 	        },
@@ -137,7 +152,7 @@
 	  },
 	  // computed: {
 		 //  ...mapGetters([
-	  // 		'financeInfo'
+	  // 		'userInfo'
 	  // 	])
 	  // },
 	}
