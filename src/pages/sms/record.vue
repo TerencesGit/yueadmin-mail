@@ -2,20 +2,28 @@
 	<section>
 		<div v-title :data-title="this.$route.name"></div>
 		<el-row class="toolbar">
-			<el-button type="primary">新增</el-button>
+			<el-form inline>
+				<el-form-item>
+					<el-input placeholder="输入手机号"></el-input>
+				</el-form-item>
+				<el-button type="primary">查询</el-button>
+			</el-form>
 		</el-row>
 		<el-table
-	    :data="sendRecords"
 	    border
+	    stripe
+	    :data="sendRecords"
+	    v-loading="loading"
 	    highlight-current-row
 	    style="width: 100%">
+	    <el-table-column type="index" width="55"></el-table-column>
 	    <el-table-column prop="recordId" label="记录ID" sortable></el-table-column>
-	    <el-table-column prop="createTime" label="创建时间" sortable :formatter="formatTime"></el-table-column>
+	    <el-table-column prop="createTime" label="发送时间" sortable :formatter="formatTime"></el-table-column>
 	    <el-table-column prop="phone" label="手机号"></el-table-column>
 	    <el-table-column prop="checkCode" label="验证码"></el-table-column>
-	    <el-table-column prop="sendStatus" label="发送状态"></el-table-column>
-	    <el-table-column prop="clientId" label="应用ID"></el-table-column>
-	    <el-table-column prop="tempId" label="模板ID"></el-table-column>
+	    <el-table-column prop="sendStatus" label="发送状态" :formatter="formatStatus"></el-table-column>
+	    <!-- <el-table-column prop="clientId" label="应用ID"></el-table-column>
+	    <el-table-column prop="tempId" label="模板ID"></el-table-column> -->
 	  </el-table>
 	  <el-row class="toolbar">
 	  	<el-pagination
@@ -31,68 +39,43 @@
   </section>
 </template>
 <script>
-	import { getSmsRecords } from '@/api'
+	import { findRecordBatch } from '@/api'
 	export default {
 		data() {
 			return {
 				pageNo: 1,
 				pageSize: 10,
 				total: 0,
-				sendRecords: [
-					{
-						recordId: 100001,
-						phone: '15212341234',
-						checkCode: '1234',
-						createTime: new Date(),
-						sendStatus: 0,
-						clientId: 1,
-						tempId: 1,
-						partnerId: 1,
-						userName: '笑雪吟风',
-					},
-					{
-						recordId: 100002,
-						phone: '15212341234',
-						checkCode: '1234',
-						createTime: new Date(),
-						sendStatus: 0,
-						clientId: 1,
-						tempId: 1,
-						partnerId: 1,
-						userName: '笑雪吟风',
-					},
-					{
-						recordId: 100003,
-						phone: '15212341234',
-						checkCode: '1234',
-						createTime: new Date(),
-						sendStatus: 0,
-						clientId: 1,
-						tempId: 1,
-						partnerId: 1,
-						userName: '笑雪吟风',
-					},
-				]
+				loading: false,
+				sendRecords: [],
 			}
 		},
 		methods: {
 			formatTime(row) {
-				return this.$moment(row.createTime).format('YYYY-MM-DD')
+				return this.$moment(row.createTime).format('YYYY-MM-DD HH:mm:ss')
+			},
+			formatStatus(row) {
+				return row.sendStatus === 1 ? '成功' : '失败'
 			},
 			handleSizeChange(val) {
 				this.pageSize = val;
+				this.getRecords()
 			},
 			handleCurrentChange(val) {
 				this.pageNo = val;
+				this.getRecords()
 			},
 			getRecords() {
 				let params = {
 					pageNo: this.pageNo,
 					pageSize: this.pageSize,
 				}
-				getSmsRecords(params).then(res => {
+				this.loading = true;
+				findRecordBatch(params).then(res => {
 					console.log(res)
+					this.loading = false;
 					if(res.data.code === '0001') {
+						this.total = res.data.result.pageInfo.total;
 						this.sendRecords = res.data.result.records;
 					} else {
 						this.$message.error(res.data.message)
@@ -101,6 +84,9 @@
 					console.log(err)
 				})
 			}
+		},
+		mounted() {
+			this.getRecords()
 		}
 	}
 </script>

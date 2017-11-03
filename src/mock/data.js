@@ -133,59 +133,32 @@ const UserList = [
 		titleName: '',
 	},
 ]
-const WaitList = []
-for(let i = 0; i < 3; i++) {
-	WaitList.push(Mock.mock({
-		tradeId: Mock.Random.id(),
-	  wareId: Mock.Random.id(),
-	  nameTrade: '巴厘岛蜜月旅拍婚纱摄影6天4晚游',
-	  otherSideName: '悦视觉传媒有限公司',
-	  tradeValue: Math.floor(Math.random()*10000) * 100,
-	  createTime: new Date(2017, Math.floor(Math.random()*8), Math.floor(Math.random()*30)),
-	  typeName: '支付',
-	  type: 1,
-	  statusMean: '未完成',
+const SmsRecords = []
+for(let i = 0; i < 20; i++) {
+	SmsRecords.push(Mock.mock({
+	  recordId: Mock.Random.id(),
+		phone: '152'+ Mock.Random.string('number', 8),
+		checkCode: Mock.Random.string('number', 4),
+		createTime: new Date(),
+		sendStatus: Mock.Random.integer(0, 1),
+		clientId: 1,
+		tempId: 1,
+		partnerId: 1,
+		userName: '笑雪吟风',
 	}))
 }
-const TradeList = []
-for(let i = 0; i < 25; i++) {
-	TradeList.push(Mock.mock({
-		tradeId: Mock.Random.id(),
-	  wareId: Mock.Random.id(),
-	  nameTrade: '巴厘岛蜜月旅拍婚纱摄影6天4晚游',
-	  otherSideName: '悦视觉传媒有限公司',
-	  tradeValue: Math.floor(Math.random()*10000) * 100,
-	  createTime: new Date(2017, Math.floor(Math.random()*8), Math.floor(Math.random()*30)),
-	  typeName: '支付',
-	  type: Mock.Random.integer(1, 7),
-	  statusMean: '待支付',
-	  status: 101,
-	}))
-}
-const IoList = [];
-const IoName = ['充值', '提现', '支付', '结算', '退款']
-const ChannelList = ['余额支付', '支付宝','微信支付']
-for(let i = 0; i< 25; i++) {
-	IoList.push(Mock.mock({
-		ioRecordId: Mock.Random.id(),
-		createTime: new Date(2017, Math.floor(Math.random()*8), Math.floor(Math.random()*30)),
-	  nameIo: IoName[Mock.Random.integer(0, 4)],
-	  ioDirection: Math.random() > 0.5 ? 1 : -1,
-	  changeValue: Math.floor(Math.random() * 1000) * 100,
-	  afterValue: Math.floor(Math.random() * 10000) * 100,
-	  ioChannel: ChannelList[Mock.Random.integer(0, 2)]
-	}))
-}
-const OrderInfo = {
-	rawOrderId: Mock.Random.id(),
-	orderName: '巴厘岛蜜月旅拍婚纱摄影6天4晚游',
-	payAmount: Math.floor(Math.random() * 10000) * 100,
-	enablePay: 1
-}
+const SmsClientList = [
+	{
+		clientId: '1001',
+		clientName: '1001',
+		signCode: '201709031731167621',
+		signName: '悦分期',
+		createTime: '2017-09-03 17:31:16',
+		updateTime: '2017-09-03 17:31:16',
+	}
+]
 export {
 	UserList,
-	WaitList,
-	TradeList,
-	IoList,
-	OrderInfo
+	SmsRecords,
+	SmsClientList,
 }

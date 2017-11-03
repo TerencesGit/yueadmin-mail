@@ -52,15 +52,15 @@
 	    return {
 	    	menus: [
 	    		{
-	    			name: '短信发送记录',
+	    			name: '短信记录',
 	    			children: [
 	        		{
 			        	name: '群发记录',
-			        	link: '/sms/reocrd/mass',
+			        	link: '/sms/record/group',
 			        },
 			        {
 			        	name: '单发记录',
-			        	link: '/sms/reocrd/single',
+			        	link: '/sms/record/single',
 			        },
 			      ]
 	    		},
@@ -82,7 +82,7 @@
 	        	]	
 	        },
 	        {
-	    			name: '邮件发送记录',
+	    			name: '邮件记录',
 	    			children: [
 	        		{
 			        	name: '群发记录',
@@ -199,7 +199,7 @@
 		}
 	}
 	.el-dropdown {
-	  width: 130px;
+	  width: 150px;
 	  text-align: right;
 	  .el-dropdown-link {
 			padding: 6px 12px;
@@ -221,7 +221,7 @@
 		}
 	}
 	.el-dropdown-menu {
-	  width: 130px;
+	  width: 150px;
 	  a {
 	  	display: inline-block;
 	  	width: 100%;

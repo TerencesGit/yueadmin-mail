@@ -1,12 +1,10 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import Utils from '@/assets/js/utils.js'
-import { UserList, WaitList, TradeList, IoList, OrderInfo } from './data.js'
+import { UserList, SmsRecords, SmsClientList } from './data.js'
 let _UserList = UserList,
-		_WaitList = WaitList,
-		_TradeList = TradeList,
-		_IoList = IoList,
-		_OrderInfo = OrderInfo;
+		_SmsRecords = SmsRecords,
+		_SmsClientList = SmsClientList;
 const retObj = {
 	code: '0001',
 	message: '操作成功',
@@ -106,28 +104,6 @@ export default {
 				}, 500)
 			})
 		})
-		// 设置支付密码
-		mock.onPost('/accountInter/setPayPassword.do').reply(config => {
-			let { password } = JSON.parse(config.data);
-			console.log(password)
-			retObj.result = {}
-			return new Promise((resolve, reject) => {
-				setTimeout(() => {
-					resolve([200, retObj])
-				}, 500)
-			})
-		})
-		// 更新支付密码
-		mock.onPost('/accountInter/updatePayPassword.do').reply(config => {
-			let { oldPass, newPass, confirmPass } = JSON.parse(config.data);
-			console.log(oldPass, newPass, confirmPass)
-			retObj.result = {}
-			return new Promise((resolve, reject) => {
-				setTimeout(() => {
-					resolve([200, retObj])
-				}, 500)
-			})
-		})
 		// 发送找回支付密码邮箱验证码
 		mock.onGet('/accountInter/sendEmailCode.do').reply(config => {
 			// let { account, findType } = JSON.parse(config.data);
@@ -170,89 +146,16 @@ export default {
 				}, 500)
 			})
 		})
-		// 重置支付密码
-		mock.onPost('/accountInter/resetPayPassword.do').reply(config => {
-			let { payPassword, code, findType } = JSON.parse(config.data);
-			console.log(payPassword, code, findType )
-			retObj.result = {}
-			return new Promise((resolve, reject) => {
-				setTimeout(() => {
-					resolve([200, retObj])
-				}, 500)
-			})
-		})
-		// 支付宝充值
-		mock.onPost('/rechargeInter/rechargeGetAlipayForm.do').reply(config => {
-			let { payChannel, totalAmount } = JSON.parse(config.data);
-			console.log( payChannel, totalAmount)
+		// 获取群发信息列表
+		mock.onGet('/smsInter/findRecordBatch.do').reply(config => {
+			let { pageNo, pageSize } = config.params;
+			console.log(pageNo, pageSize)
+			let total = SmsRecords.length;
+			let recordPage = SmsRecords.filter((record, index) => index < pageNo * pageSize && index >= (pageNo - 1) * pageSize );
 			retObj.result = {
-				formHtml: `<form action="http://localhost:8088/#/account/waiting" 
-				name="punchout_form"></form>`
-			}
-			return new Promise((resolve, reject) => {
-				setTimeout(() => {
-					resolve([200, retObj])
-				}, 500)
-			})
-		})
-		// 余额支付
-		mock.onPost('/payInter/payByBalance.do').reply(config => {
-			let { orderId, payChannel, payPassword } = JSON.parse(config.data);
-			console.log(orderId, payChannel, payPassword)
-			retObj.result = {}
-			return new Promise((resolve, reject) => {
-				setTimeout(() => {
-					resolve([200, retObj])
-				}, 500)
-			})
-		})
-		// 支付宝支付
-		mock.onPost('/payInter/getAlipayForm.do').reply(config => {
-			let { orderId, payChannel, payPassword } = JSON.parse(config.data);
-			console.log(orderId, payChannel, payPassword)
-			retObj.result = {}
-			return new Promise((resolve, reject) => {
-				setTimeout(() => {
-					resolve([200, retObj])
-				}, 500)
-			})
-		})
-		// 获取订单详情
-		mock.onGet('/queryInter/getOrderInfoById.do').reply(config => {
-			let { orderId } = config.params;
-			// console.log(orderId)
-			if(orderId) {
-				retObj.result ={
-					orderInfo: OrderInfo
-				}
-			}
-			return new Promise((resolve, reject) => {
-				setTimeout(() => {
-					resolve([200, retObj])
-				}, 500)
-			})
-		})
-		// 获取交易记录
-		mock.onGet('/queryInter/getTradeListPage.do').reply(config => {
-			let { pageNo, pageSize, type, status } = config.params;
-			// console.log(pageNo, pageSize, type, status)
-			let _tradeList = []
-			let count = '';
-			if(type === 0) {
-				_tradeList = TradeList
-				count = TradeList.length
-			} else if (type === 1) {
-				_tradeList = WaitList
-				count = WaitList.length
-			} else {
-				_tradeList = TradeList.filter(t => t.type === type)
-				count = _tradeList.length
-			}
-			let tradePage = _tradeList.filter((t, index) => index < pageNo * pageSize && index >= pageSize * (pageNo - 1))
-			retObj.result = {
-				tradeList: tradePage,
+				records: recordPage,
 				pageInfo: {
-					total: count
+					total
 				}
 			}
 			return new Promise((resolve, reject) => {
@@ -261,21 +164,68 @@ export default {
 				}, 500)
 			})
 		})
-		// 获取收支明细
-		mock.onGet('/queryInter/getIoListPage.do').reply(config => {
-			let { pageNo, pageSize, type } = config.params;
-			// console.log(pageNo, pageSize, type)
-			let _ioList = IoList.filter((i, index) => index <= pageNo * pageSize && index > pageSize * (pageNo - 1));
+		// 获取信息应用列表
+		mock.onGet('/smsInter/findClientList.do').reply(config => {
+			let { pageNo, pageSize } = config.params;
+			// console.log(pageNo, pageSize)
+			let total = _SmsClientList.length;
+			let clientPage = _SmsClientList.filter((record, index) => index < pageNo * pageSize && index >= (pageNo - 1) * pageSize );
 			retObj.result = {
-				ioList: _ioList,
+				clients: clientPage,
 				pageInfo: {
-					total: IoList.length
+					total
 				}
 			}
 			return new Promise((resolve, reject) => {
 				setTimeout(() => {
 					resolve([200, retObj])
 				}, 500)
+			})
+		})
+		// 新建信息应用列表
+		mock.onPost('/smsInter/createSmsClient.do').reply(config => {
+			let { clientName, signName } = JSON.parse(config.data);
+			// console.log(clientName, signName)
+			_SmsClientList.push({
+				clientId: new Date().getTime(),
+				clientName,
+				signName,
+				signCode: new Date().getTime(),
+			})
+			retObj.result = {}
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve([200, retObj])
+				}, 1000)
+			})
+		})
+		// 更新信息应用列表
+		mock.onPost('/smsInter/updateSmsClient.do').reply(config => {
+			let { clientId, clientName, signName } = JSON.parse(config.data);
+			// console.log(clientId, clientName, signName)
+			_SmsClientList.filter(cli => {
+				if(cli.clientId === clientId) {
+					cli.clientName = clientName,
+					cli.signName = signName
+				}
+			})
+			retObj.result = {}
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve([200, retObj])
+				}, 1000)
+			})
+		})
+		// 删除信息应用列表
+		mock.onPost('/smsInter/delSmsClient.do').reply(config => {
+			let { clientId } = JSON.parse(config.data);
+			// console.log(clientId, clientName, signName)
+			_SmsClientList = _SmsClientList.filter(client => client.clientId != clientId)
+			retObj.result = {}
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve([200, retObj])
+				}, 1000)
 			})
 		})
 	}

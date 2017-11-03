@@ -3,12 +3,13 @@ import Container from '@/components/container'
 import Login from '@/pages/base/login'
 import CasLogin from '@/pages/base/casLogin'
 import SmsRecord from '@/pages/sms/record'
+import SmsClientManage from '@/pages/sms/clientmanage'
 
 const routes =  [
   {
     path: '/',
-    name: '短信发送记录',
-    redirect: '/sms/record/mass'
+    name: '首页',
+    redirect: '/sms/record/group'
   },
   {
     path: '/login',
@@ -21,10 +22,20 @@ const routes =  [
     component: Container,
     children: [
     	{
-    		path: 'record/mass',
-		    name: '短信发送记录',
+    		path: 'record/group',
+		    name: '群发记录',
 		    component: SmsRecord,
-    	}
+    	},
+    	{
+    		path: 'record/single',
+		    name: '单发记录',
+		    component: SmsRecord,
+    	},
+    	{
+    		path: 'manage/client',
+		    name: '应用管理',
+		    component: SmsClientManage,
+    	},
     ]
   }
 ]
