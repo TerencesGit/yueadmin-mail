@@ -149,10 +149,21 @@ for(let i = 0; i < 20; i++) {
 }
 const SmsClientList = [
 	{
-		clientId: '1001',
+		clientId: '20171103101',
 		clientName: '1001',
 		signCode: '201709031731167621',
 		signName: '悦分期',
+		createTime: '2017-09-03 17:31:16',
+		updateTime: '2017-09-03 17:31:16',
+	}
+]
+const SmsTemplateList = [
+	{
+		tempId: '20171103101',
+		tempCode: '201709031731167621',
+		tempName: '1001',
+		tempContent: '悦分期',
+		status: 1,
 		createTime: '2017-09-03 17:31:16',
 		updateTime: '2017-09-03 17:31:16',
 	}
@@ -161,4 +172,5 @@ export {
 	UserList,
 	SmsRecords,
 	SmsClientList,
+	SmsTemplateList,
 }

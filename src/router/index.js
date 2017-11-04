@@ -4,6 +4,7 @@ import Login from '@/pages/base/login'
 import CasLogin from '@/pages/base/casLogin'
 import SmsRecord from '@/pages/sms/record'
 import SmsClientManage from '@/pages/sms/clientmanage'
+import SmsTemplateManage from '@/pages/sms/templatemanage'
 
 const routes =  [
   {
@@ -33,8 +34,13 @@ const routes =  [
     	},
     	{
     		path: 'manage/client',
-		    name: '应用管理',
+		    name: '短信应用管理',
 		    component: SmsClientManage,
+    	},
+    	{
+    		path: 'manage/template',
+		    name: '短信模板管理',
+		    component: SmsTemplateManage,
     	},
     ]
   }

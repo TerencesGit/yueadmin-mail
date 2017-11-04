@@ -1,10 +1,11 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import Utils from '@/assets/js/utils.js'
-import { UserList, SmsRecords, SmsClientList } from './data.js'
+import { UserList, SmsRecords, SmsClientList, SmsTemplateList } from './data.js'
 let _UserList = UserList,
 		_SmsRecords = SmsRecords,
-		_SmsClientList = SmsClientList;
+		_SmsClientList = SmsClientList,
+		_SmsTemplateList = SmsTemplateList;
 const retObj = {
 	code: '0001',
 	message: '操作成功',
@@ -167,7 +168,6 @@ export default {
 		// 获取信息应用列表
 		mock.onGet('/smsInter/findClientList.do').reply(config => {
 			let { pageNo, pageSize } = config.params;
-			// console.log(pageNo, pageSize)
 			let total = _SmsClientList.length;
 			let clientPage = _SmsClientList.filter((record, index) => index < pageNo * pageSize && index >= (pageNo - 1) * pageSize );
 			retObj.result = {
@@ -185,7 +185,6 @@ export default {
 		// 新建信息应用列表
 		mock.onPost('/smsInter/createSmsClient.do').reply(config => {
 			let { clientName, signName } = JSON.parse(config.data);
-			// console.log(clientName, signName)
 			_SmsClientList.push({
 				clientId: new Date().getTime(),
 				clientName,
@@ -202,7 +201,6 @@ export default {
 		// 更新信息应用列表
 		mock.onPost('/smsInter/updateSmsClient.do').reply(config => {
 			let { clientId, clientName, signName } = JSON.parse(config.data);
-			// console.log(clientId, clientName, signName)
 			_SmsClientList.filter(cli => {
 				if(cli.clientId === clientId) {
 					cli.clientName = clientName,
@@ -219,8 +217,66 @@ export default {
 		// 删除信息应用列表
 		mock.onPost('/smsInter/delSmsClient.do').reply(config => {
 			let { clientId } = JSON.parse(config.data);
-			// console.log(clientId, clientName, signName)
 			_SmsClientList = _SmsClientList.filter(client => client.clientId != clientId)
+			retObj.result = {}
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve([200, retObj])
+				}, 1000)
+			})
+		})
+		// 获取信息模板列表
+		mock.onGet('/smsInter/findTempList.do').reply(config => {
+			let { pageNo, pageSize } = config.params;
+			let total = _SmsTemplateList.length;
+			let templatePage = _SmsTemplateList.filter((record, index) => index < pageNo * pageSize && index >= (pageNo - 1) * pageSize );
+			retObj.result = {
+				tempList: templatePage,
+				pageInfo: {
+					total
+				}
+			}
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve([200, retObj])
+				}, 500)
+			})
+		})
+		// 新建信息模板列表
+		mock.onPost('/smsInter/createSmsTemp.do').reply(config => {
+			let { tempName, tempContent } = JSON.parse(config.data);
+			_SmsTemplateList.push({
+				tempId: new Date().getTime(),
+				tempName,
+				tempContent,
+			})
+			retObj.result = {}
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve([200, retObj])
+				}, 1000)
+			})
+		})
+		// 更新信息模板列表
+		mock.onPost('/smsInter/updateSmsTemp.do').reply(config => {
+			let { tempId, tempName, tempContent } = JSON.parse(config.data);
+			_SmsTemplateList.filter(cli => {
+				if(cli.tempId === tempId) {
+					cli.tempName = tempName,
+					cli.tempContent = tempContent
+				}
+			})
+			retObj.result = {}
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve([200, retObj])
+				}, 1000)
+			})
+		})
+		// 删除信息模板列表
+		mock.onPost('/smsInter/delSmsTemp.do').reply(config => {
+			let { tempId } = JSON.parse(config.data);
+			_SmsTemplateList = _SmsTemplateList.filter(temp => temp.tempId != tempId)
 			retObj.result = {}
 			return new Promise((resolve, reject) => {
 				setTimeout(() => {

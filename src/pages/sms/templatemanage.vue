@@ -2,7 +2,7 @@
 	<section>
 		<div v-title :data-title="this.$route.name"></div>
 		<el-row class="toolbar">
-			<el-button type="primary" @click="handleAdd">新建应用</el-button>
+			<el-button type="primary" @click="handleAdd">新建模板</el-button>
 		</el-row>
 		<el-table
 	    border
@@ -12,10 +12,10 @@
 	    highlight-current-row
 	    style="width: 100%">
 	    <el-table-column type="index" width="55"></el-table-column>
-	    <el-table-column prop="clientId" label="应用ID" sortable></el-table-column>
-	    <el-table-column prop="clientName" label="应用名称"></el-table-column>
-	    <el-table-column prop="signCode" label="签名编码"></el-table-column>
-	    <el-table-column prop="signName" label="应用签名"></el-table-column>
+	    <el-table-column prop="tempId" label="模板ID" sortable></el-table-column>
+	    <el-table-column prop="tempCode" label="模板编码" sortable></el-table-column>
+	    <el-table-column prop="tempName" label="模板名称"></el-table-column>
+	    <el-table-column prop="tempContent" label="模板内容"></el-table-column>
 	    <el-table-column prop="updateTime" label="更新时间" :formatter="formatTime" sortable></el-table-column>
 	    <el-table-column label="操作">
 	    	<template slot-scope="scope">
@@ -35,29 +35,36 @@
 	      :total="total">
 	    </el-pagination>
 	  </el-row>
-	  <!-- 应用表单 -->
-		<el-dialog :visible.sync="clientFormVisible" :title="clientFormTitle">
+	  <!-- 模板表单 -->
+		<el-dialog :visible.sync="tempFormVisible" :title="tempFormTitle">
 			<el-row>
 				<el-col :span="18" :offset="3">
-					<el-form :model="clientForm" ref="clientForm" :rules="rules" label-width="120px">
-						<el-form-item label="应用名称：" prop="clientName">
-							<el-input v-model="clientForm.clientName" placeholder="输入用户名"></el-input>
+					<el-form :model="tempForm" ref="tempForm" :rules="rules" label-width="120px">
+						<el-form-item label="模板名称：" prop="tempName">
+							<el-input v-model="tempForm.tempName" placeholder="输入模板名称"></el-input>
 						</el-form-item>
-						<el-form-item label="应用签名：" prop="signName">
-							<el-input v-model="clientForm.signName" placeholder="输入真实姓名"></el-input>
+						<el-form-item label="模板类型：" prop="tempCode">
+							<el-select v-model="tempForm.status" style="width: 100%" placeholder="请选择模板类型">
+								<el-option label="验证码" :value="0"></el-option>
+								<el-option label="提示信息" :value="1"></el-option>
+								<el-option label="群发" :value="2"></el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="模板内容：" prop="tempCode">
+							<el-input type="textarea" :rows="3" v-model="tempForm.tempCode" placeholder="输入模板内容"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col> 
 			</el-row>
 			<div slot="footer">
-				<el-button @click="clientFormVisible = false">取消</el-button>
+				<el-button @click="tempFormVisible = false">取消</el-button>
 				<el-button type="primary" @click="submitForm">确定</el-button>
 			</div>
 		</el-dialog>
   </section>
 </template>
 <script>
-	import { findClientList, createSmsClient, updateSmsClient, delSmsClient } from '@/api'
+	import { findTempList, createSmsTemp, updateSmsTemp, delSmsTemp } from '@/api'
 	export default {
 		data() {
 			return {
@@ -66,19 +73,21 @@
 				total: 0,
 				loading: false,
 				sendRecords: [],
-				clientFormVisible: false,
-				clientFormTitle: '新建应用',
-				clientForm: {
-					clientId: '',
-					clientName: '',
-					signName: '',
+				tempFormVisible: false,
+				tempFormTitle: '新建模板',
+				tempForm: {
+					tempId: '',
+					tempName: '',
+					tempCode: '',
+					tempContent: '',
+					status: 0,
 				},
 				rules: {
-					clientName: [
-						{ required: true, message: '输入应用名称', trigger: 'blur'}
+					tempName: [
+						{ required: true, message: '输入模板名称', trigger: 'blur'}
 					],
-					signName: [
-						{ required: true, message: '输入应用签名', trigger: 'blur'}
+					tempCode: [
+						{ required: true, message: '输入模板签名', trigger: 'blur'}
 					]
 				}
 			}
@@ -89,24 +98,24 @@
 			},
 			handleSizeChange(val) {
 				this.pageSize = val;
-				this.getClientList()
+				this.getTempList()
 			},
 			handleCurrentChange(val) {
 				this.pageNo = val;
-				this.getClientList()
+				this.getTempList()
 			},
-			getClientList() {
+			getTempList() {
 				let params = {
 					pageNo: this.pageNo,
 					pageSize: this.pageSize,
 				}
 				this.loading = true;
-				findClientList(params).then(res => {
+				findTempList(params).then(res => {
 					console.log(res)
 					this.loading = false;
 					if(res.data.code === '0001') {
 						this.total = res.data.result.pageInfo.total;
-						this.sendRecords = res.data.result.clients;
+						this.sendRecords = res.data.result.tempList;
 					} else {
 						this.$message.error(res.data.message)
 					}
@@ -115,56 +124,57 @@
 				})
 			},
 			handleAdd() {
-				this.clientForm = {
-					clientId: '',
-					clientName: '',
-					signName: '',
+				this.tempForm = {
+					tempId: '',
+					tempName: '',
+					tempCode: '',
+					status: 0,
 				}
-				this.clientFormTitle = '新建应用';
-				this.clientFormVisible = true;
+				this.tempFormTitle = '新建模板';
+				this.tempFormVisible = true;
 			},
 			handleEdit(row) {
-				this.clientForm = {
-					clientId: row.clientId,
-					clientName: row.clientName,
-					signName: row.signName,
+				this.tempForm = {
+					tempId: row.tempId,
+					tempName: row.tempName,
+					tempCode: row.tempCode,
 				}
-				this.clientFormTitle = '编辑应用';
-				this.clientFormVisible = true;
+				this.tempFormTitle = '编辑模板';
+				this.tempFormVisible = true;
 			},
 			submitForm() {
-				this.$refs.clientForm.validate(valid => {
+				this.$refs.tempForm.validate(valid => {
 					if(!valid) return;
 					let data = {
-						clientId: this.clientForm.clientId,
-						clientName: this.clientForm.clientName,
-						signName: this.clientForm.signName,
+						tempId: this.tempForm.tempId,
+						tempName: this.tempForm.tempName,
+						tempCode: this.tempForm.tempCode,
 						signType: 0,
 					}
-					this.clientFormVisible = false;
-					if(data.clientId) {
-						updateSmsClient(data).then(res => {
+					this.tempFormVisible = false;
+					if(data.tempId) {
+						updateSmsTemp(data).then(res => {
 							if(res.data.code === '0001') {
 								this.$message.success(res.data.message)
-								this.getClientList()
+								this.getTempList()
 							} else {
 								this.$message.error(res.data.message)
 							}
 						}).catch(err => {
-							this.clientFormVisible = false;
+							this.tempFormVisible = false;
 							console.log(err)
 							this.$catchError(err)
 						})
 					} else {
-						createSmsClient(data).then(res => {
+						createSmsTemp(data).then(res => {
 							if(res.data.code === '0001') {
 								this.$message.success(res.data.message)
-								this.getClientList()
+								this.getTempList()
 							} else {
 								this.$message.error(res.data.message)
 							}
 						}).catch(err => {
-							this.clientFormVisible = false;
+							this.tempFormVisible = false;
 							console.log(err)
 							this.$catchError(err)
 						})
@@ -172,14 +182,14 @@
 				})
 			},
 			handleDelete(row) {
-				this.$confirm(`确定删除${row.clientName}？`, '提示', {type: 'warning'}).then(() => {
+				this.$confirm(`确定删除${row.tempName}？`, '提示', {type: 'warning'}).then(() => {
 					let data = {
-						clientId: row.clientId
+						tempId: row.tempId
 					}
-					delSmsClient(data).then(res => {
+					delSmsTemp(data).then(res => {
 						if(res.data.code === '0001') {
 							this.$message.success(res.data.message)
-							this.getClientList()
+							this.getTempList()
 						} else {
 							this.$message.error(res.data.message)
 						}
@@ -193,7 +203,7 @@
 			},
 		},
 		mounted() {
-			this.getClientList()
+			this.getTempList()
 		}
 	}
 </script>
