@@ -164,6 +164,7 @@ const SmsTemplateList = [
 		tempName: '1001',
 		tempContent: '悦分期',
 		status: 1,
+		tempType: 1,
 		createTime: '2017-09-03 17:31:16',
 		updateTime: '2017-09-03 17:31:16',
 	}

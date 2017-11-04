@@ -16,6 +16,7 @@
 	    <el-table-column prop="tempCode" label="模板编码" sortable></el-table-column>
 	    <el-table-column prop="tempName" label="模板名称"></el-table-column>
 	    <el-table-column prop="tempContent" label="模板内容"></el-table-column>
+	    <el-table-column prop="tempType" label="模板类型" :formatter="formatType"></el-table-column>
 	    <el-table-column prop="updateTime" label="更新时间" :formatter="formatTime" sortable></el-table-column>
 	    <el-table-column label="操作">
 	    	<template slot-scope="scope">
@@ -43,15 +44,15 @@
 						<el-form-item label="模板名称：" prop="tempName">
 							<el-input v-model="tempForm.tempName" placeholder="输入模板名称"></el-input>
 						</el-form-item>
-						<el-form-item label="模板类型：" prop="tempCode">
-							<el-select v-model="tempForm.status" style="width: 100%" placeholder="请选择模板类型">
+						<el-form-item label="模板类型：" prop="tempType">
+							<el-select v-model="tempForm.tempType" style="width: 100%" placeholder="请选择模板类型">
 								<el-option label="验证码" :value="0"></el-option>
 								<el-option label="提示信息" :value="1"></el-option>
 								<el-option label="群发" :value="2"></el-option>
 							</el-select>
 						</el-form-item>
-						<el-form-item label="模板内容：" prop="tempCode">
-							<el-input type="textarea" :rows="3" v-model="tempForm.tempCode" placeholder="输入模板内容"></el-input>
+						<el-form-item label="模板内容：" prop="tempContent">
+							<el-input type="textarea" :rows="3" v-model="tempForm.tempContent" placeholder="输入模板内容"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col> 
@@ -80,7 +81,7 @@
 					tempName: '',
 					tempCode: '',
 					tempContent: '',
-					status: 0,
+					tempType: 0,
 				},
 				rules: {
 					tempName: [
@@ -95,6 +96,10 @@
 		methods: {
 			formatTime(row) {
 				return this.$moment(row.createTime).format('YYYY-MM-DD HH:mm:ss')
+			},
+			formatType(row) {
+				let type = ['验证码', '提示信息', '群发'];
+				return type[row.tempType];
 			},
 			handleSizeChange(val) {
 				this.pageSize = val;
@@ -127,8 +132,8 @@
 				this.tempForm = {
 					tempId: '',
 					tempName: '',
-					tempCode: '',
-					status: 0,
+					tempContent: '',
+					tempType: 0,
 				}
 				this.tempFormTitle = '新建模板';
 				this.tempFormVisible = true;
@@ -137,7 +142,8 @@
 				this.tempForm = {
 					tempId: row.tempId,
 					tempName: row.tempName,
-					tempCode: row.tempCode,
+					tempContent: row.tempContent,
+					tempType: row.tempType,
 				}
 				this.tempFormTitle = '编辑模板';
 				this.tempFormVisible = true;
@@ -148,8 +154,8 @@
 					let data = {
 						tempId: this.tempForm.tempId,
 						tempName: this.tempForm.tempName,
-						tempCode: this.tempForm.tempCode,
-						signType: 0,
+						tempContent: this.tempForm.tempContent,
+						tempType: this.tempForm.tempType,
 					}
 					this.tempFormVisible = false;
 					if(data.tempId) {

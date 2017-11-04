@@ -244,11 +244,14 @@ export default {
 		})
 		// 新建信息模板列表
 		mock.onPost('/smsInter/createSmsTemp.do').reply(config => {
-			let { tempName, tempContent } = JSON.parse(config.data);
+			let { tempName, tempContent, tempType } = JSON.parse(config.data);
+			console.log(tempName, tempContent, tempType)
 			_SmsTemplateList.push({
 				tempId: new Date().getTime(),
+				tempCode: new Date().getTime(),
 				tempName,
 				tempContent,
+				tempType,
 			})
 			retObj.result = {}
 			return new Promise((resolve, reject) => {
@@ -259,11 +262,12 @@ export default {
 		})
 		// 更新信息模板列表
 		mock.onPost('/smsInter/updateSmsTemp.do').reply(config => {
-			let { tempId, tempName, tempContent } = JSON.parse(config.data);
+			let { tempId, tempName, tempContent, tempType } = JSON.parse(config.data);
 			_SmsTemplateList.filter(cli => {
 				if(cli.tempId === tempId) {
-					cli.tempName = tempName,
+					cli.tempName = tempName
 					cli.tempContent = tempContent
+					cli.tempType = tempType
 				}
 			})
 			retObj.result = {}
