@@ -165,6 +165,24 @@ export default {
 				}, 500)
 			})
 		})
+		// 获取单发信息列表
+		mock.onGet('/smsInter/findRecordSingle.do').reply(config => {
+			let { pageNo, pageSize } = config.params;
+			console.log(pageNo, pageSize)
+			let total = SmsRecords.length;
+			let recordPage = SmsRecords.filter((record, index) => index < pageNo * pageSize && index >= (pageNo - 1) * pageSize );
+			retObj.result = {
+				records: recordPage,
+				pageInfo: {
+					total
+				}
+			}
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve([200, retObj])
+				}, 500)
+			})
+		})
 		// 获取信息应用列表
 		mock.onGet('/smsInter/findClientList.do').reply(config => {
 			let { pageNo, pageSize } = config.params;

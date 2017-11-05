@@ -3,6 +3,7 @@ import Container from '@/components/container'
 import Login from '@/pages/base/login'
 import CasLogin from '@/pages/base/casLogin'
 import SmsRecord from '@/pages/sms/record'
+import SmsRecordSingle from '@/pages/sms/recordsingle'
 import SmsClientManage from '@/pages/sms/clientmanage'
 import SmsTemplateManage from '@/pages/sms/templatemanage'
 
@@ -30,7 +31,7 @@ const routes =  [
     	{
     		path: 'record/single',
 		    name: '单发记录',
-		    component: SmsRecord,
+		    component: SmsRecordSingle,
     	},
     	{
     		path: 'manage/client',
