@@ -1,11 +1,12 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import Utils from '@/assets/js/utils.js'
-import { UserList, SmsRecords, SmsClientList, SmsTemplateList } from './data.js'
+import { UserList, SmsRecords, SmsClientList, SmsTemplateList, ClientTemp } from './data.js'
 let _UserList = UserList,
 		_SmsRecords = SmsRecords,
 		_SmsClientList = SmsClientList,
-		_SmsTemplateList = SmsTemplateList;
+		_SmsTemplateList = SmsTemplateList,
+		_ClientTemp = ClientTemp;
 const retObj = {
 	code: '0001',
 	message: '操作成功',
@@ -188,10 +189,14 @@ export default {
 			let { pageNo, pageSize } = config.params;
 			let total = _SmsClientList.length;
 			let clientPage = _SmsClientList.filter((record, index) => index < pageNo * pageSize && index >= (pageNo - 1) * pageSize );
-			retObj.result = {
-				clients: clientPage,
-				pageInfo: {
-					total
+			let retObj = {
+				code: '0001',
+				message: '操作成功',
+				result: {
+					clients: clientPage,
+					pageInfo: {
+						total
+					}
 				}
 			}
 			return new Promise((resolve, reject) => {
@@ -248,10 +253,14 @@ export default {
 			let { pageNo, pageSize } = config.params;
 			let total = _SmsTemplateList.length;
 			let templatePage = _SmsTemplateList.filter((record, index) => index < pageNo * pageSize && index >= (pageNo - 1) * pageSize );
-			retObj.result = {
-				tempList: templatePage,
-				pageInfo: {
-					total
+			let retObj = {
+				code: '0001',
+				message: '操作成功',
+				result: {
+					tempList: templatePage,
+					pageInfo: {
+						total
+					}
 				}
 			}
 			return new Promise((resolve, reject) => {
@@ -299,6 +308,40 @@ export default {
 		mock.onPost('/smsInter/delSmsTemp.do').reply(config => {
 			let { tempId } = JSON.parse(config.data);
 			_SmsTemplateList = _SmsTemplateList.filter(temp => temp.tempId != tempId)
+			retObj.result = {}
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve([200, retObj])
+				}, 1000)
+			})
+		})
+		mock.onGet('/smsInter/getClientTemplates.do').reply(config => {
+			let { clientId } = config.params;
+			let clientTempList = _ClientTemp.filter(client => client.clientId === clientId);
+			let retObj = {
+				code: '0001',
+				message: '操作成功',
+			}
+			retObj.result = {
+				clientTempList
+			}
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve([200, retObj])
+				}, 1000)
+			})
+		})
+		mock.onPost('/smsInter/createClientTemp.do').reply(config => {
+			let { clientId, tempIdList } = JSON.parse(config.data);
+			let clientTempList = _ClientTemp.filter(client => client.clientId === clientId);
+			let oldTempIdList = clientTempList.map(clientTemp => clientTemp.tempId);
+			tempIdList.forEach(tempId => {
+				_ClientTemp.push({
+					Id: new Date().getTime(),
+					clientId,
+					tempId,
+				})
+			})
 			retObj.result = {}
 			return new Promise((resolve, reject) => {
 				setTimeout(() => {

@@ -149,24 +149,80 @@ for(let i = 0; i < 20; i++) {
 }
 const SmsClientList = [
 	{
-		clientId: '20171103101',
-		clientName: '1001',
+		clientId: '201711031001',
+		clientName: '应用1001',
 		signCode: '201709031731167621',
 		signName: '悦分期',
 		createTime: '2017-09-03 17:31:16',
 		updateTime: '2017-09-03 17:31:16',
-	}
+	},
+	{
+		clientId: '201711031002',
+		clientName: '应用1002',
+		signCode: '201709031731167621',
+		signName: '悦分期1',
+		createTime: '2017-09-03 17:31:16',
+		updateTime: '2017-09-03 17:31:16',
+	},
+	{
+		clientId: '201711031003',
+		clientName: '应用1003',
+		signCode: '201709031731167621',
+		signName: '悦分期2',
+		createTime: '2017-09-03 17:31:16',
+		updateTime: '2017-09-03 17:31:16',
+	},
 ]
 const SmsTemplateList = [
 	{
-		tempId: '20171103101',
+		tempId: '201711031001',
 		tempCode: '201709031731167621',
-		tempName: '1001',
+		tempName: '模板1001',
 		tempContent: '悦分期',
 		status: 1,
 		tempType: 1,
 		createTime: '2017-09-03 17:31:16',
 		updateTime: '2017-09-03 17:31:16',
+	},
+	{
+		tempId: '201711031002',
+		tempCode: '201709031731167621',
+		tempName: '模板1002',
+		tempContent: '悦分期',
+		status: 1,
+		tempType: 2,
+		createTime: '2017-09-03 17:31:16',
+		updateTime: '2017-09-03 17:31:16',
+	},
+	{
+		tempId: '201711031003',
+		tempCode: '201709031731167621',
+		tempName: '模板1003',
+		tempContent: '悦分期',
+		status: 1,
+		tempType: 0,
+		createTime: '2017-09-03 17:31:16',
+		updateTime: '2017-09-03 17:31:16',
+	}
+]
+const ClientTemp = [
+	{
+		Id: '201711061001',
+		clientId: '201711031001',
+		tempId: '201711031001',
+		status: 1,
+	},
+	{
+		Id: '201711061002',
+		clientId: '201711031001',
+		tempId: '201711031002',
+		status: 1,
+	},
+	{
+		Id: '201711061003',
+		clientId: '201711031002',
+		tempId: '201711031001',
+		status: 1,
 	}
 ]
 export {
@@ -174,4 +230,5 @@ export {
 	SmsRecords,
 	SmsClientList,
 	SmsTemplateList,
+	ClientTemp
 }
