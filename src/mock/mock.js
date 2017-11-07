@@ -1,12 +1,13 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import Utils from '@/assets/js/utils.js'
-import { UserList, SmsRecords, SmsClientList, SmsTemplateList, ClientTemp } from './data.js'
+import { UserList, SmsRecords, SmsClientList, SmsTemplateList, ClientTemp, MassTexting } from './data.js'
 let _UserList = UserList,
 		_SmsRecords = SmsRecords,
 		_SmsClientList = SmsClientList,
 		_SmsTemplateList = SmsTemplateList,
-		_ClientTemp = ClientTemp;
+		_ClientTemp = ClientTemp,
+		_MassTexting = MassTexting;
 const retObj = {
 	code: '0001',
 	message: '操作成功',
@@ -315,6 +316,7 @@ export default {
 				}, 1000)
 			})
 		})
+		// 获取应用关联模板
 		mock.onGet('/smsInter/getClientTemplates.do').reply(config => {
 			let { clientId } = config.params;
 			let clientTempList = _ClientTemp.filter(client => client.clientId === clientId);
@@ -331,6 +333,7 @@ export default {
 				}, 1000)
 			})
 		})
+		// 创建应用模板关联
 		mock.onPost('/smsInter/createClientTemp.do').reply(config => {
 			let { clientId, tempIdList } = JSON.parse(config.data);
 			let clientTempList = _ClientTemp.filter(client => client.clientId === clientId);
@@ -347,6 +350,35 @@ export default {
 				setTimeout(() => {
 					resolve([200, retObj])
 				}, 1000)
+			})
+		})
+		// 获取群发管理列表
+		mock.onGet('/smsInter/findBatchSendList.do').reply(config => {
+			let { pageNo, pageSize } = config.params;
+			let total = _MassTexting.length;
+			let batchSends = _MassTexting.filter((record, index) => index < pageNo * pageSize && index >= (pageNo - 1) * pageSize );
+			batchSends.forEach(send => {
+				_SmsTemplateList.forEach(temp => {
+					if(send.tempId === temp.tempId) {
+						send.tempName = temp.tempName
+					}
+				})
+			})
+			console.log(batchSends)
+			let retObj = {
+				code: '0001',
+				message: '操作成功',
+				result: {
+					batchSends,
+					pageInfo: {
+						total
+					}
+				}
+			}
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve([200, retObj])
+				}, 500)
 			})
 		})
 	}

@@ -6,6 +6,7 @@ import SmsRecord from '@/pages/sms/record'
 import SmsRecordSingle from '@/pages/sms/recordsingle'
 import SmsClientManage from '@/pages/sms/clientmanage'
 import SmsTemplateManage from '@/pages/sms/templatemanage'
+import SmsSendGroup from '@/pages/sms/sendgroup'
 
 const routes =  [
   {
@@ -32,6 +33,11 @@ const routes =  [
     		path: 'record/single',
 		    name: '单发记录',
 		    component: SmsRecordSingle,
+    	},
+    	{
+    		path: 'manage/masstexting',
+		    name: '短信群发管理',
+		    component: SmsSendGroup,
     	},
     	{
     		path: 'manage/client',

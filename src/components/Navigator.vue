@@ -69,7 +69,7 @@
 	        	children: [
 	        		{
 			        	name: '群发管理',
-			        	link: '/sms/manage/send',
+			        	link: '/sms/manage/masstexting',
 			        },
 	        		{
 			        	name: '应用管理',

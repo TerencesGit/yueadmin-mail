@@ -149,7 +149,7 @@ for(let i = 0; i < 20; i++) {
 }
 const SmsClientList = [
 	{
-		clientId: '201711031001',
+		clientId: 201711031001,
 		clientName: '应用1001',
 		signCode: '201709031731167621',
 		signName: '悦分期',
@@ -157,7 +157,7 @@ const SmsClientList = [
 		updateTime: '2017-09-03 17:31:16',
 	},
 	{
-		clientId: '201711031002',
+		clientId: 201711031002,
 		clientName: '应用1002',
 		signCode: '201709031731167621',
 		signName: '悦分期1',
@@ -165,7 +165,7 @@ const SmsClientList = [
 		updateTime: '2017-09-03 17:31:16',
 	},
 	{
-		clientId: '201711031003',
+		clientId: 201711031003,
 		clientName: '应用1003',
 		signCode: '201709031731167621',
 		signName: '悦分期2',
@@ -175,7 +175,7 @@ const SmsClientList = [
 ]
 const SmsTemplateList = [
 	{
-		tempId: '201711031001',
+		tempId: 201711031001,
 		tempCode: '201709031731167621',
 		tempName: '模板1001',
 		tempContent: '悦分期',
@@ -185,7 +185,7 @@ const SmsTemplateList = [
 		updateTime: '2017-09-03 17:31:16',
 	},
 	{
-		tempId: '201711031002',
+		tempId: 201711031002,
 		tempCode: '201709031731167621',
 		tempName: '模板1002',
 		tempContent: '悦分期',
@@ -195,7 +195,7 @@ const SmsTemplateList = [
 		updateTime: '2017-09-03 17:31:16',
 	},
 	{
-		tempId: '201711031003',
+		tempId: 201711031003,
 		tempCode: '201709031731167621',
 		tempName: '模板1003',
 		tempContent: '悦分期',
@@ -207,28 +207,52 @@ const SmsTemplateList = [
 ]
 const ClientTemp = [
 	{
-		Id: '201711061001',
-		clientId: '201711031001',
-		tempId: '201711031001',
+		Id: 201711061001,
+		clientId: 201711031001,
+		tempId: 201711031001,
 		status: 1,
 	},
 	{
-		Id: '201711061002',
-		clientId: '201711031001',
-		tempId: '201711031002',
+		Id: 201711061002,
+		clientId: 201711031001,
+		tempId: 201711031002,
 		status: 1,
 	},
 	{
-		Id: '201711061003',
-		clientId: '201711031002',
-		tempId: '201711031001',
+		Id: 201711061003,
+		clientId: 201711031002,
+		tempId: 201711031001,
 		status: 1,
 	}
+]
+const MassTexting = [
+	{
+		batchSendId: 201711071001,
+		batchSendName: '群发短信1001',
+		tempId: 201711031001,
+		clientId: 201711031001,
+		status: 1,
+	},
+	{
+		batchSendId: 201711071002,
+		batchSendName: '群发短信1002',
+		tempId: 201711031002,
+		clientId: 201711031002,
+		status: 1,
+	},
+	{
+		batchSendId: 201711071003,
+		batchSendName: '群发短信1003',
+		tempId: 201711031003,
+		clientId: 201711031003,
+		status: 1,
+	},
 ]
 export {
 	UserList,
 	SmsRecords,
 	SmsClientList,
 	SmsTemplateList,
-	ClientTemp
+	ClientTemp,
+	MassTexting,
 }
