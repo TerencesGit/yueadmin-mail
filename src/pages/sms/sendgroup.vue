@@ -2,7 +2,7 @@
 	<section>
 		<div v-title :data-title="this.$route.name"></div>
 		<el-row class="toolbar">
-			<el-button type="primary" @click="handleAdd">新建模板</el-button>
+			<el-button type="primary" @click="handleAdd">新建群发</el-button>
 		</el-row>
 		<el-table
 	    border
@@ -74,7 +74,7 @@
   </section>
 </template>
 <script>
-	import { findBatchSendList, findClientList, findTempList, createSmsTemp, updateSmsTemp, delSmsTemp } from '@/api'
+	import { findBatchSendList, findClientList, findTempList, createBatchSend, updateBatchSend, delBatchSend } from '@/api'
 	export default {
 		data() {
 			return {
@@ -180,8 +180,8 @@
 				this.batchSendForm = {
 					batchSendId: '',
 					batchSendName: '',
-					// clientId: '',
-					// tempId: 0,
+					clientId: this.clientList[0].clientId,
+					tempId: this.tempList[0].tempId,
 				}
 				this.batchSendFormTitle = '新建模板';
 				this.batchSendFormVisible = true;
@@ -205,9 +205,11 @@
 						clientId: this.batchSendForm.clientId,
 						tempId: this.batchSendForm.tempId,
 					}
+					console.log(data)
 					this.batchSendFormVisible = false;
 					if(data.batchSendId) {
-						updateSmsTemp(data).then(res => {
+						updateBatchSend(data).then(res => {
+							console.log(res)
 							if(res.data.code === '0001') {
 								this.$message.success(res.data.message)
 								this.getBatchSendList()
@@ -220,7 +222,7 @@
 							this.$catchError(err)
 						})
 					} else {
-						createSmsTemp(data).then(res => {
+						createBatchSend(data).then(res => {
 							if(res.data.code === '0001') {
 								this.$message.success(res.data.message)
 								this.getBatchSendList()
@@ -238,9 +240,9 @@
 			handleDelete(row) {
 				this.$confirm(`确定删除${row.tempName}？`, '提示', {type: 'warning'}).then(() => {
 					let data = {
-						tempId: row.tempId
+						batchSendId: row.batchSendId
 					}
-					delSmsTemp(data).then(res => {
+					delBatchSend(data).then(res => {
 						if(res.data.code === '0001') {
 							this.$message.success(res.data.message)
 							this.getBatchSendList()

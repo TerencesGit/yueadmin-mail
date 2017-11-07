@@ -225,7 +225,7 @@ const ClientTemp = [
 		status: 1,
 	}
 ]
-const MassTexting = [
+const BatchSendList = [
 	{
 		batchSendId: 201711071001,
 		batchSendName: '群发短信1001',
@@ -254,5 +254,5 @@ export {
 	SmsClientList,
 	SmsTemplateList,
 	ClientTemp,
-	MassTexting,
+	BatchSendList,
 }

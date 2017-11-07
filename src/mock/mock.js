@@ -1,13 +1,13 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import Utils from '@/assets/js/utils.js'
-import { UserList, SmsRecords, SmsClientList, SmsTemplateList, ClientTemp, MassTexting } from './data.js'
+import { UserList, SmsRecords, SmsClientList, SmsTemplateList, ClientTemp, BatchSendList } from './data.js'
 let _UserList = UserList,
 		_SmsRecords = SmsRecords,
 		_SmsClientList = SmsClientList,
 		_SmsTemplateList = SmsTemplateList,
 		_ClientTemp = ClientTemp,
-		_MassTexting = MassTexting;
+		_BatchSendList = BatchSendList;
 const retObj = {
 	code: '0001',
 	message: '操作成功',
@@ -355,8 +355,8 @@ export default {
 		// 获取群发管理列表
 		mock.onGet('/smsInter/findBatchSendList.do').reply(config => {
 			let { pageNo, pageSize } = config.params;
-			let total = _MassTexting.length;
-			let batchSends = _MassTexting.filter((record, index) => index < pageNo * pageSize && index >= (pageNo - 1) * pageSize );
+			let total = _BatchSendList.length;
+			let batchSends = _BatchSendList.filter((record, index) => index < pageNo * pageSize && index >= (pageNo - 1) * pageSize );
 			batchSends.forEach(send => {
 				_SmsTemplateList.forEach(temp => {
 					if(send.tempId === temp.tempId) {
@@ -364,7 +364,6 @@ export default {
 					}
 				})
 			})
-			console.log(batchSends)
 			let retObj = {
 				code: '0001',
 				message: '操作成功',
@@ -379,6 +378,50 @@ export default {
 				setTimeout(() => {
 					resolve([200, retObj])
 				}, 500)
+			})
+		})
+		// 新建群发
+		mock.onPost('/smsInter/createBatchSend.do').reply(config => {
+			let { batchSendName, clientId, tempId } = JSON.parse(config.data);
+			_BatchSendList.push({
+				batchSendId: new Date().getTime(),
+				batchSendName, 
+				clientId, 
+				tempId,
+			})
+			retObj.result = {}
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve([200, retObj])
+				}, 1000)
+			})
+		})
+		// 更新群发
+		mock.onPost('/smsInter/updateBatchSend.do').reply(config => {
+			let {  batchSendId, batchSendName, clientId, tempId } = JSON.parse(config.data);
+			_BatchSendList.filter(send => {
+				if(send.batchSendId === batchSendId) {
+					send.batchSendName = batchSendName
+					send.clientId = clientId
+					send.tempId = tempId
+				}
+			})
+			retObj.result = {}
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve([200, retObj])
+				}, 1000)
+			})
+		})
+		// 删除群发
+		mock.onPost('/smsInter/delBatchSend.do').reply(config => {
+			let { batchSendId } = JSON.parse(config.data);
+			_BatchSendList = _BatchSendList.filter(send => send.batchSendId != batchSendId)
+			retObj.result = {}
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve([200, retObj])
+				}, 1000)
 			})
 		})
 	}
