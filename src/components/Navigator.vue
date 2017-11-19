@@ -18,10 +18,10 @@
 					  </span>
 					  <el-dropdown-menu slot="dropdown">
 					    <el-dropdown-item>
-					    	<a @click="enterUms">进入账户中心</a>
+					    	<a href="https://transformgit.github.io/yueadmin-ums/" target="_blank">进入账户中心</a>
 					    </el-dropdown-item>
 					    <el-dropdown-item>
-					    	<a @click="enterB2b">进入交易中心</a>
+					    	<a href="https://transformgit.github.io/yueadmin-b2b/" target="_blank">进入交易中心</a>
 					    </el-dropdown-item>
 							<el-dropdown-item divided>
 								<a @click="logout">退出</a>
@@ -118,12 +118,6 @@
 	  methods: {
 	  	handleOrder () {
 			  this.$router.push('/account/waiting')
-	  	},
-	  	enterUms() {
-	  		window.open('https://transformgit.github.io/yueadmin-ums/')
-	  	},
-	  	enterB2b() {
-	  		window.open('https://transformgit.github.io/yueadmin-b2b/')
 	  	},
 	    logout () {
 	    	this.$confirm('确定退出系统?', '提示', {
